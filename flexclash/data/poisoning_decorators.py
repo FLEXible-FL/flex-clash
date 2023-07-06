@@ -20,7 +20,7 @@ def backdoor_data(func):
             try:
                 new_feat, new_label = func(feature, label, *args, **kwargs)
             except ValueError:
-                raise ValueError("The decorated function: {func.__name__} must return two values.")
+                raise ValueError("The decorated function: {func.__name__} must return two values: features, labels.")
             features.append(new_feat)
             labels.append(new_label)
         return Dataset(X_data=features, y_data=labels)
