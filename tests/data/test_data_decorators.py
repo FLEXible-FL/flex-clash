@@ -2,15 +2,17 @@ import unittest
 
 import numpy as np
 import pytest
-
 from flex.data import Dataset, FedDataset
+
 from flexclash.data import backdoor_data
+
 
 @pytest.fixture(name="fld")
 def fixture_flex_dataset():
     """Function that returns a FlexDataset provided as example to test functions.
 
-    Returns:
+    Returns
+    -------
         FedDataset: A FlexDataset generated randomly
     """
     X_data = np.random.rand(100).reshape([20, 5])
@@ -26,7 +28,6 @@ def fixture_flex_dataset():
 
 
 class TestPoisoningDecorators(unittest.TestCase):
-
     @pytest.fixture(autouse=True)
     def _fixture_flex_dataset(self, fld):
         self._fld = fld
@@ -35,7 +36,7 @@ class TestPoisoningDecorators(unittest.TestCase):
         @backdoor_data
         def change_labels_to_one(feature, label):
             return feature, 1
-        
+
         poisoned_fld = self._fld.map(change_labels_to_one, clients_ids=["client_1"])
         poisoned_labels = poisoned_fld["client_1"].y_data
 
