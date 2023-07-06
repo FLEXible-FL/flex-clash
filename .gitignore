@@ -157,4 +157,3 @@ __MACOSX/
 
 # Datasets
 torch_datasets/
-data/
