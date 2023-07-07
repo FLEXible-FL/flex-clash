@@ -158,8 +158,6 @@ __MACOSX/
 # Datasets
 torch_datasets/
 
-*.py
-*.ipynb
 emnist-digits.mat
 notebooks/cifar-10-batches-py/
 notebooks/cifar-10-batches-py.tar.gz
