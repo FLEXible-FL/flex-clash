@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="flex-clash",
+    name="flexclash",
     version="0.0.1",
     author="Nuria Rodríguez Barroso",
     keywords="adversarial attacks defences FL federated-learning flexible",
