@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 from flex.data import Dataset, FedDataset
 
-from flexclash.data import backdoor_data
+from flexclash.data import data_poisoner
 
 
 @pytest.fixture(name="fld")
@@ -43,7 +43,7 @@ class TestPoisoningDecorators(unittest.TestCase):
         assert all(poisoned_labels == np.ones_like(poisoned_labels))
 
     def test_backdoor_insuficient_return_values(self):
-        @backdoor_data
+        @data_poisoner
         def change_labels_to_one(feature, label):
             return feature
 
