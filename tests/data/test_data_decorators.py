@@ -32,8 +32,8 @@ class TestPoisoningDecorators(unittest.TestCase):
     def _fixture_flex_dataset(self, fld):
         self._fld = fld
 
-    def test_backdoor_decorator(self):
-        @backdoor_data
+    def test_data_poisoner_decorator(self):
+        @data_poisoner
         def change_labels_to_one(feature, label):
             return feature, 1
 
@@ -42,7 +42,7 @@ class TestPoisoningDecorators(unittest.TestCase):
 
         assert all(poisoned_labels == np.ones_like(poisoned_labels))
 
-    def test_backdoor_insuficient_return_values(self):
+    def test_data_poisoner_insuficient_return_values(self):
         @data_poisoner
         def change_labels_to_one(feature, label):
             return feature
