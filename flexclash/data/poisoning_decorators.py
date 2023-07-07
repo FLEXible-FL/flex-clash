@@ -4,7 +4,7 @@ from flex.common.utils import check_min_arguments
 from flex.data import Dataset
 
 
-def backdoor_data(func):
+def data_poisoner(func):
     min_args = 2
     assert check_min_arguments(
         func, min_args
