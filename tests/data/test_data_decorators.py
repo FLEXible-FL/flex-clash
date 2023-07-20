@@ -17,13 +17,13 @@ def fixture_flex_dataset():
     """
     X_data = np.random.rand(100).reshape([20, 5])
     y_data = np.random.choice(2, 20)
-    fcd = Dataset(X_data=X_data, y_data=y_data)
+    fcd = Dataset.from_numpy(X_data, y_data)
     X_data = np.random.rand(100).reshape([20, 5])
     y_data = np.random.choice(2, 20)
-    fcd1 = Dataset(X_data=X_data, y_data=y_data)
+    fcd1 = Dataset.from_numpy(X_data, y_data)
     X_data = np.random.rand(100).reshape([20, 5])
     y_data = np.random.choice(2, 20)
-    fcd2 = Dataset(X_data=X_data, y_data=y_data)
+    fcd2 = Dataset.from_numpy(X_data, y_data)
     return FedDataset({"client_1": fcd, "client_2": fcd1, "client_3": fcd2})
 
 
@@ -38,7 +38,7 @@ class TestPoisoningDecorators(unittest.TestCase):
             return feature, 1
 
         poisoned_fld = self._fld.apply(change_labels_to_one, clients_ids=["client_1"])
-        poisoned_labels = poisoned_fld["client_1"].y_data
+        poisoned_labels = poisoned_fld["client_1"].y_data.tolist()
 
         assert all(poisoned_labels == np.ones_like(poisoned_labels))
 
