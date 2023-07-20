@@ -1,23 +1,14 @@
-import unittest
-
-import numpy as np
-import pytest
-
-from flexclash.model import model_poisoner
-
 import copy
 import unittest
 
+import pytest
+from flex.data import Dataset, FedDataDistribution
+from flex.model import FlexModel
+from flex.pool import FlexPool, deploy_server_model, init_server_model
 from sklearn.datasets import load_iris
 from sklearn.neighbors import KNeighborsClassifier
 
-from flex.data import FedDataDistribution, Dataset
-from flex.model import FlexModel
-from flex.pool import (
-    deploy_server_model,
-    init_server_model,
-    FlexPool
-)
+from flexclash.model import model_poisoner
 
 
 class TestModelPoisoningDecorators(unittest.TestCase):
@@ -36,7 +27,7 @@ class TestModelPoisoningDecorators(unittest.TestCase):
 
         @deploy_server_model
         def copy_server_model_to_clients(server_flex_model: FlexModel):
-            return copy.deepcopy(server_flex_model) 
+            return copy.deepcopy(server_flex_model)
 
         @model_poisoner
         def poison_model(client_model: FlexModel):
@@ -54,9 +45,10 @@ class TestModelPoisoningDecorators(unittest.TestCase):
 
         poisoned_clients = p.clients.select(2)
         poisoned_clients.map(poison_model)
-        assert all(poisoned_clients._models[i]["model"].get_params()["n_neighbors"] == 6 for i in poisoned_clients._models)
+        assert all(
+            poisoned_clients._models[i]["model"].get_params()["n_neighbors"] == 6
+            for i in poisoned_clients._models
+        )
 
         with pytest.raises(AssertionError):
             poisoned_clients.map(bad_poison_model)
-            
-
