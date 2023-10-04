@@ -1,8 +1,8 @@
 import functools
 
+import numpy as np
 from flex.common.utils import check_min_arguments
 from flex.data import Dataset
-import numpy as np
 
 
 def data_poisoner(func):

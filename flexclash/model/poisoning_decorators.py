@@ -1,9 +1,10 @@
 import functools
+from copy import deepcopy
 
 from flex.common.utils import check_min_arguments
-from flex.model import FlexModel
 from flex.data import Dataset
-from copy import deepcopy
+from flex.model import FlexModel
+
 
 def model_poisoner(func):
     min_args = 1
@@ -19,7 +20,9 @@ def model_poisoner(func):
         **kwargs,
     ):
         poisoned_client_model = func(deepcopy(client_model))
-        assert isinstance(poisoned_client_model, FlexModel), "The decorated function: {func.__name__} must return a FlexModel object."
+        assert isinstance(
+            poisoned_client_model, FlexModel
+        ), "The decorated function: {func.__name__} must return a FlexModel object."
         client_model.update(poisoned_client_model)
 
     return _poison_FlexModel_
