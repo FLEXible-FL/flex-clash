@@ -8,37 +8,44 @@ For the moment, we include:
 """
 
 from flex.pool.decorators import aggregate_weights
+from flex.pool import set_tensorly_backend
+import tensorly as tl
 
 @aggregate_weights
 def median(list_of_weights: list):
-    import numpy as np
-
-    if len(list_of_weights) == 0:
-        return None
-    number_of_layers = len(list_of_weights[0])
-    layers = [np.array([list_of_weights[i][j] for i in range(len(list_of_weights))]) for j in range(number_of_layers)]
-    return [np.median(layer, axis=0) for layer in layers]
+    set_tensorly_backend(list_of_weights)
+    agg_weights = []
+    for layer_index in range(len(list_of_weights[0])):
+        weights_per_layer = [
+            weights[layer_index] for weights in list_of_weights
+        ]
+        weights_per_layer = tl.stack(weights_per_layer)
+        agg_layer = tl.sort(weights_per_layer, axis=0)[len(weights_per_layer)//2]
+        agg_weights.append(agg_layer)
+    return agg_weights
 
 
 @aggregate_weights
 def trimmed_mean(list_of_weights: list, trim_proportion=0.1):
-    from scipy.stats import trim_mean
-    import numpy as np
-
-    if len(list_of_weights) == 0:
-        return None
-    number_of_layers = len(list_of_weights[0])
-    layers = [np.array([list_of_weights[i][j] for i in range(len(list_of_weights))]) for j in range(number_of_layers)]
-    return [trim_mean(layer, trim_proportion, axis=0) for layer in layers]
+    set_tensorly_backend(list_of_weights)
+    agg_weights = []
+    for layer_index in range(len(list_of_weights[0])):
+        weights_per_layer = [
+            weights[layer_index] for weights in list_of_weights
+        ]
+        weights_per_layer = tl.stack(weights_per_layer)
+        min_trim = round(trim_proportion*len(weights_per_layer))
+        max_trim = round((1-trim_proportion)*len(weights_per_layer))
+        weights_per_layer = tl.sort(weights_per_layer, axis=0)[min_trim:max_trim]
+        agg_layer = tl.mean(weights_per_layer, axis=0)
+        agg_weights.append(agg_layer)
+    return agg_weights
 
 @aggregate_weights
 def multikrum(list_of_weights: list, f=1, m=5):
-    import numpy as np
-    from scipy.stats import trim_mean
-
+    # clients_params = [np.array([list_of_weights[j][i] for i in range(number_of_layers)])  for j in range(len(list_of_weights))]
+    num_clients = len(list_of_weights)
     number_of_layers = len(list_of_weights[0])
-    clients_params = [np.array([list_of_weights[j][i] for i in range(number_of_layers)])  for j in range(len(list_of_weights))]
-    num_clients = len(clients_params)
 
     #Calculate matrix of distances
     distances = [list() for i in range(num_clients)]
