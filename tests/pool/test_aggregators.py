@@ -104,21 +104,21 @@ class TestFlexAggregators(unittest.TestCase):
 
     def test_fed_bulyan_with_torch(self):
         client_weights = deepcopy(self._torch_weights["weights"][0])
-        bulyan(self._torch_weights, None, m=0)
+        bulyan(self._torch_weights, None, m=1)
         agg_weights = self._torch_weights["aggregated_weights"]
         assert tl.get_backend() == "pytorch"
         assert all(tl.all(agg_weights[i] == w) for i, w in enumerate(client_weights))
 
     def test_fed_bulyan_with_tf(self):
         client_weights = deepcopy(self._tf_weights["weights"][0])
-        bulyan(self._tf_weights, None, m=0)
+        bulyan(self._tf_weights, None, m=1)
         agg_weights = self._tf_weights["aggregated_weights"]
         assert tl.get_backend() == "tensorflow"
         assert all(tl.all(agg_weights[i] == w) for i, w in enumerate(client_weights))
 
     def test_fed_bulyan_with_np(self):
         client_weights = deepcopy(self._np_weights["weights"][0])
-        bulyan(self._np_weights, None, m=0)
+        bulyan(self._np_weights, None, m=1)
         agg_weights = self._np_weights["aggregated_weights"]
         assert tl.get_backend() == "numpy"
         assert all(tl.all(agg_weights[i] == w) for i, w in enumerate(client_weights))
