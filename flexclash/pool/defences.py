@@ -138,8 +138,7 @@ def bulyan(list_of_weights: list, f=1, m=5):
         # delete selected client distances, by setting her distances to infinity
         for i, _ in enumerate(distance_matrix[selected_client_index]):
             distance_matrix[selected_client_index][i] = float("inf")
-        for i, row in enumerate(distance_matrix):
-            row[selected_client_index] = float("inf")
+            distance_matrix[i][selected_client_index] = float("inf")
 
     selected_weights = [list_of_weights[i] for i in selected_clients]
 
