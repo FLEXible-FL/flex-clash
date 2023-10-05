@@ -2,7 +2,6 @@ import functools
 
 from flex.common.utils import check_min_arguments
 from flex.data import Dataset
-import numpy as np
 
 
 def data_poisoner(func):
@@ -28,6 +27,6 @@ def data_poisoner(func):
                 )
             features.append(new_feat)
             labels.append(new_label)
-        return Dataset(X_data=np.array(features), y_data=np.array(labels))
+        return Dataset.from_list(features, labels)
 
     return _poison_Dataset_
