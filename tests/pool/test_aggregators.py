@@ -5,7 +5,7 @@ from copy import deepcopy
 import pytest
 import tensorly as tl
 
-from flexclash.pool import median, multikrum, trimmed_mean, bulyan
+from flexclash.pool import bulyan, median, multikrum, trimmed_mean
 
 
 def simulate_clients_weights_for_module(n_clients, modulename):

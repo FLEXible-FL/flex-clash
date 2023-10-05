@@ -12,7 +12,9 @@ from flex.pool.aggregators import set_tensorly_backend
 from flex.pool.decorators import aggregate_weights
 
 
-def generalized_percentile_aggregator_f(list_of_weights: list, percentile: [slice, int]):
+def generalized_percentile_aggregator_f(
+    list_of_weights: list, percentile: [slice, int]
+):
     agg_weights = []
     number_of_layers = len(list_of_weights[0])
     for layer_index in range(number_of_layers):
@@ -33,7 +35,9 @@ def trimmed_mean_f(list_of_weights: list, trim_proportion=0.1):
     num_clients = len(list_of_weights)
     min_trim = round(trim_proportion * num_clients)
     max_trim = round((1 - trim_proportion) * num_clients)
-    return generalized_percentile_aggregator_f(list_of_weights, slice(min_trim, max_trim+1))
+    return generalized_percentile_aggregator_f(
+        list_of_weights, slice(min_trim, max_trim + 1)
+    )
 
 
 def compute_distance_matrix(list_of_weights: list):
@@ -61,6 +65,7 @@ def trimmed_mean(list_of_weights, *args, **kwargs):
     set_tensorly_backend(list_of_weights)
     return trimmed_mean_f(list_of_weights, *args, **kwargs)
 
+
 def krum_criteria(distance_matrix, f, m):
     num_clients = len(distance_matrix)
     # Compute scores
@@ -69,11 +74,14 @@ def krum_criteria(distance_matrix, f, m):
     for i in range(num_clients):
         completed_scores = distance_matrix[i]
         completed_scores.sort()
-        scores.append(sum(completed_scores[1:num_selected+1])) # distance to oneself is always first
+        scores.append(
+            sum(completed_scores[1 : num_selected + 1])
+        )  # distance to oneself is always first
     # We associate each client with her scores and sort them using her scores
     pairs = [(i, scores[i]) for i in range(num_clients)]
     pairs.sort(key=lambda pair: pair[1])
     return pairs[:m]
+
 
 @aggregate_weights
 def multikrum(list_of_weights: list, f=1, m=5):
@@ -99,11 +107,11 @@ def bulyan(list_of_weights: list, f=1, m=5):
         selected_client_index = pairs[0][0]
         selected_clients.append(selected_client_index)
         # delete selected client distances, by setting her distances to infinity
-        for i,_ in enumerate(distance_matrix[selected_client_index]):
-            distance_matrix[selected_client_index][i] = float('inf')
+        for i, _ in enumerate(distance_matrix[selected_client_index]):
+            distance_matrix[selected_client_index][i] = float("inf")
         for i, row in enumerate(distance_matrix):
-            row[selected_client_index] = float('inf')
+            row[selected_client_index] = float("inf")
 
     selected_weights = [list_of_weights[i] for i in selected_clients]
 
-    return trimmed_mean_f(selected_weights, m/len(selected_clients))
+    return trimmed_mean_f(selected_weights, m / len(selected_clients))
