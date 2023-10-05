@@ -5,7 +5,9 @@ from copy import deepcopy
 import pytest
 import tensorly as tl
 
-from flexclash.pool import bulyan, median, multikrum, trimmed_mean
+from flexclash.pool import bulyan
+from flexclash.pool import central_differential_privacy as cdp
+from flexclash.pool import median, multikrum, trimmed_mean
 
 
 def simulate_clients_weights_for_module(n_clients, modulename):
@@ -122,3 +124,24 @@ class TestFlexAggregators(unittest.TestCase):
         agg_weights = self._np_weights["aggregated_weights"]
         assert tl.get_backend() == "numpy"
         assert all(tl.all(agg_weights[i] == w) for i, w in enumerate(client_weights))
+
+    def test_fed_cdp_with_torch(self):
+        client_weights = deepcopy(self._torch_weights["weights"][0])
+        cdp(self._torch_weights, None)
+        agg_weights = self._torch_weights["aggregated_weights"]
+        assert tl.get_backend() == "pytorch"
+        assert all(tl.all(agg_weights[i] != w) for i, w in enumerate(client_weights))
+
+    def test_fed_cdp_with_tf(self):
+        client_weights = deepcopy(self._tf_weights["weights"][0])
+        cdp(self._tf_weights, None)
+        agg_weights = self._tf_weights["aggregated_weights"]
+        assert tl.get_backend() == "tensorflow"
+        assert all(tl.all(agg_weights[i] != w) for i, w in enumerate(client_weights))
+
+    def test_fed_cdp_with_np(self):
+        client_weights = deepcopy(self._np_weights["weights"][0])
+        cdp(self._np_weights, None)
+        agg_weights = self._np_weights["aggregated_weights"]
+        assert tl.get_backend() == "numpy"
+        assert all(tl.all(agg_weights[i] != w) for i, w in enumerate(client_weights))

@@ -7,9 +7,12 @@ For the moment, we include:
 - Bulyan
 """
 
+from math import sqrt
+
 import tensorly as tl
-from flex.pool.aggregators import set_tensorly_backend
+from flex.pool.aggregators import fed_avg_f, set_tensorly_backend
 from flex.pool.decorators import aggregate_weights
+from numpy.random import normal
 
 
 def generalized_percentile_aggregator_f(
@@ -31,7 +34,7 @@ def median_f(list_of_weights: list):
     return generalized_percentile_aggregator_f(list_of_weights, median_pos)
 
 
-def trimmed_mean_f(list_of_weights: list, trim_proportion=0.1):
+def trimmed_mean_f(list_of_weights: list, trim_proportion):
     num_clients = len(list_of_weights)
     min_trim = round(trim_proportion * num_clients)
     max_trim = round((1 - trim_proportion) * num_clients)
@@ -45,25 +48,55 @@ def compute_distance_matrix(list_of_weights: list):
     distance_matrix = [list(range(num_clients)) for i in range(num_clients)]
     for i in range(num_clients):
         w_i = list_of_weights[i]
-        tmp_dist = 0
         for j in range(i, num_clients):
             w_j = list_of_weights[j]
-            tmp_dist += sum([tl.norm(tl.tensor(a - b)) ** 2 for a, b in zip(w_i, w_j)])
+            tmp_dist = 0
+            tmp_dist += sum([tl.norm(a - b) ** 2 for a, b in zip(w_i, w_j)])
             distance_matrix[i][j] = tmp_dist
             distance_matrix[j][i] = tmp_dist
     return distance_matrix
 
 
-@aggregate_weights
-def median(list_of_weights: list, *args, **kwargs):
-    set_tensorly_backend(list_of_weights)
-    return median_f(list_of_weights, *args, **kwargs)
+def central_differential_privacy_f(list_of_weights: list, l2_clip, noise_multiplier):
+    num_clients = len(list_of_weights)
+    for i in range(num_clients):
+        tmp_dist = 0
+        tmp_dist += sum([tl.norm(w) ** 2 for w in list_of_weights[i]])
+        l2_norm = sqrt(tmp_dist)
+        clip_ratio = l2_clip / l2_norm
+        for j, w in enumerate(list_of_weights[i]):
+            context = tl.context(w)
+            clip_ratio = tl.tensor(clip_ratio, **context)
+            list_of_weights[i][j] = w * clip_ratio
+    agg_weights = fed_avg_f(list_of_weights)
+    noise_ratio = l2_clip * noise_multiplier / num_clients
+    for i, w in enumerate(agg_weights):
+        context = tl.context(agg_weights[i])
+        noise = tl.tensor(
+            normal(loc=0.0, scale=noise_ratio, size=tl.shape(w)), **context
+        )
+        agg_weights[i] = w + noise
+    return agg_weights
 
 
 @aggregate_weights
-def trimmed_mean(list_of_weights, *args, **kwargs):
+def central_differential_privacy(
+    list_of_weights: list, l2_clip=1, noise_multiplier=0.1
+):
     set_tensorly_backend(list_of_weights)
-    return trimmed_mean_f(list_of_weights, *args, **kwargs)
+    return central_differential_privacy_f(list_of_weights, l2_clip, noise_multiplier)
+
+
+@aggregate_weights
+def median(list_of_weights: list):
+    set_tensorly_backend(list_of_weights)
+    return median_f(list_of_weights)
+
+
+@aggregate_weights
+def trimmed_mean(list_of_weights, trim_proportion=0.1):
+    set_tensorly_backend(list_of_weights)
+    return trimmed_mean_f(list_of_weights, trim_proportion)
 
 
 def krum_criteria(distance_matrix, f, m):
@@ -86,7 +119,6 @@ def krum_criteria(distance_matrix, f, m):
 @aggregate_weights
 def multikrum(list_of_weights: list, f=1, m=5):
     set_tensorly_backend(list_of_weights)
-    # Compute matrix of distances
     distance_matrix = compute_distance_matrix(list_of_weights)
     pairs = krum_criteria(distance_matrix, f, m)
     selected_weights = [list_of_weights[i] for i, _ in pairs]
@@ -97,7 +129,6 @@ def multikrum(list_of_weights: list, f=1, m=5):
 def bulyan(list_of_weights: list, f=1, m=5):
     set_tensorly_backend(list_of_weights)
     num_clients = len(list_of_weights)
-    # Compute matrix of distances
     distance_matrix = compute_distance_matrix(list_of_weights)
     # Using the krum criteria, select each time a client
     selected_clients = []
