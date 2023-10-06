@@ -60,7 +60,7 @@ def central_differential_privacy_f(list_of_weights: list, l2_clip, noise_multipl
     num_clients = len(list_of_weights)
     for i in range(num_clients):
         tmp_dist = sum([tl.norm(w) ** 2 for w in list_of_weights[i]])
-        l2_norm = sqrt(tmp_dist)+1e-12
+        l2_norm = sqrt(tmp_dist) + 1e-12
         clip_ratio = min(1, l2_clip / l2_norm)
         for j, w in enumerate(list_of_weights[i]):
             context = tl.context(w)

@@ -1,7 +1,6 @@
 import copy
 import unittest
 
-import numpy as np
 import pytest
 from flex.data import Dataset, FedDataDistribution
 from flex.model import FlexModel
