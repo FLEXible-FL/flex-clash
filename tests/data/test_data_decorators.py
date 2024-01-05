@@ -17,13 +17,13 @@ def fixture_flex_dataset():
     """
     X_data = np.random.rand(100).reshape([20, 5])
     y_data = np.random.choice(2, 20)
-    fcd = Dataset.from_numpy(X_data, y_data)
+    fcd = Dataset.from_array(X_data, y_data)
     X_data = np.random.rand(100).reshape([20, 5])
     y_data = np.random.choice(2, 20)
-    fcd1 = Dataset.from_numpy(X_data, y_data)
+    fcd1 = Dataset.from_array(X_data, y_data)
     X_data = np.random.rand(100).reshape([20, 5])
     y_data = np.random.choice(2, 20)
-    fcd2 = Dataset.from_numpy(X_data, y_data)
+    fcd2 = Dataset.from_array(X_data, y_data)
     return FedDataset({"client_1": fcd, "client_2": fcd1, "client_3": fcd2})
 
 

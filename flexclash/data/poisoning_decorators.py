@@ -27,6 +27,6 @@ def data_poisoner(func):
                 )
             features.append(new_feat)
             labels.append(new_label)
-        return Dataset.from_list(features, labels)
+        return Dataset.from_array(features, labels)
 
     return _poison_Dataset_
