@@ -15,7 +15,7 @@ class TestModelPoisoningDecorators(unittest.TestCase):
     @pytest.fixture(autouse=True)
     def _fixture_iris_dataset(self):
         iris = load_iris()
-        c_iris = Dataset.from_numpy(iris.data, iris.target)
+        c_iris = Dataset.from_array(iris.data, iris.target)
         self.f_iris = FedDataDistribution.iid_distribution(c_iris, n_clients=5)
 
     def test_decorators(self):
