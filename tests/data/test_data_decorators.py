@@ -37,8 +37,8 @@ class TestPoisoningDecorators(unittest.TestCase):
         def change_labels_to_one(feature, label):
             return feature, 1
 
-        poisoned_fld = self._fld.apply(change_labels_to_one, clients_ids=["client_1"])
-        poisoned_labels = poisoned_fld["client_1"].y_data.tolist()
+        poisoned_fld = self._fld.apply(change_labels_to_one, node_ids=["client_1"])
+        _, poisoned_labels = poisoned_fld["client_1"].to_list()
 
         assert all(poisoned_labels == np.ones_like(poisoned_labels))
 
@@ -48,4 +48,5 @@ class TestPoisoningDecorators(unittest.TestCase):
             return feature
 
         with pytest.raises(ValueError):
-            self._fld.apply(change_labels_to_one, clients_ids=["client_1"])
+            poisoned_fld = self._fld.apply(change_labels_to_one, node_ids=["client_1"])
+            poisoned_fld["client_1"].to_list()
