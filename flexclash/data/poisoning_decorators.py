@@ -3,6 +3,8 @@ import functools
 from flex.common.utils import check_min_arguments
 from flex.data import Dataset
 
+from flexclash.data.dataset import PoisonedDataset
+
 
 def data_poisoner(func):
     min_args = 2
@@ -16,17 +18,20 @@ def data_poisoner(func):
         *args,
         **kwargs,
     ):
-        features = []
-        labels = []
-        for feature, label in client_dataset:
+        def poison_func(label, feature):
             try:
-                new_feat, new_label = func(feature, label, *args, **kwargs)
+                new_label, new_feature = func(label, feature, *args, **kwargs)
             except ValueError:
                 raise ValueError(
                     "The decorated function: {func.__name__} must return two values: features, labels."
                 )
-            features.append(new_feat)
-            labels.append(new_label)
-        return Dataset.from_array(features, labels)
+            return new_label, new_feature
+
+        poisoned_dataset = PoisonedDataset(
+            X_data=client_dataset.X_data,
+            y_data=client_dataset.y_data,
+            poisoning_function=poison_func,
+        )
+        return poisoned_dataset
 
     return _poison_Dataset_
