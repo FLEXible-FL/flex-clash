@@ -5,7 +5,7 @@ flex-clash is an implementation of the state-of-the-art adversarial attacks and 
 In order to install this repo locally:
 
 ``
-    pip install -e ".[develop]"
+    pip install -e
 ``
 
 In the following we detail the defences implemented:
