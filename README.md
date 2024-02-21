@@ -5,6 +5,14 @@ flex-clash is an implementation of the state-of-the-art adversarial attacks and 
 
 
 ## Features
+
+In the following we detail the poisoning attacks implemented:
+
+|  Attack |  Description  | Citation |
+|----------|:-----------------------------------:|------:|
+| Data poisoning | It consists of poisoning a certain amount of data of certain clients randomly or according to certain criteria. Several examples are shown in the notebooks. | [Data Poisoning Attacks Against Federated Learning Systems](https://link.springer.com/chapter/10.1007/978-3-030-58951-6_24) |
+| Model poisoning | It consists of directly poisoning the weights of the model update that the client shares with the server. | [Deep Model Poisoning Attack on Federated Learning](https://www.mdpi.com/1999-5903/13/3/73)|
+
 In the following we detail the defences implemented:
 
 |  Defence |  Description  | Citation |
