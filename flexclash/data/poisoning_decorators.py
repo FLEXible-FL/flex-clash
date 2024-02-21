@@ -27,11 +27,22 @@ def data_poisoner(func):
                 )
             return new_label, new_feature
 
-        poisoned_dataset = PoisonedDataset(
-            X_data=client_dataset.X_data,
-            y_data=client_dataset.y_data,
-            poisoning_function=poison_func,
-        )
+        if isinstance(client_dataset, PoisonedDataset):
+
+            def new_poison_func(label, feature):
+                return poison_func(*client_dataset.poisoning_function(label, feature))
+
+            poisoned_dataset = PoisonedDataset(
+                X_data=client_dataset.X_data,
+                y_data=client_dataset.y_data,
+                poisoning_function=new_poison_func,
+            )
+        else:
+            poisoned_dataset = PoisonedDataset(
+                X_data=client_dataset.X_data,
+                y_data=client_dataset.y_data,
+                poisoning_function=poison_func,
+            )
         return poisoned_dataset
 
     return _poison_Dataset_

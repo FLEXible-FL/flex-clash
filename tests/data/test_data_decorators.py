@@ -50,3 +50,18 @@ class TestPoisoningDecorators(unittest.TestCase):
         with pytest.raises(ValueError):
             poisoned_fld = self._fld.apply(change_labels_to_one, node_ids=["client_1"])
             poisoned_fld["client_1"].to_list()
+
+    def test_data_poisoner_composition_works(self):
+        @data_poisoner
+        def change_labels_to_one(feature, label):
+            return feature, 1
+
+        @data_poisoner
+        def add_one_to_label(feature, label):
+            return feature, label + 1
+
+        poisoned_fld = self._fld.apply(change_labels_to_one, node_ids=["client_1"])
+        poisoned_fld = poisoned_fld.apply(add_one_to_label, node_ids=["client_1"])
+        _, poisoned_labels = poisoned_fld["client_1"].to_list()
+
+        assert all(poisoned_labels == 2 * np.ones_like(poisoned_labels))
