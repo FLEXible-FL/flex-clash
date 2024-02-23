@@ -11,17 +11,17 @@ This repository includes both:
 
 ### Folder structure
 
-- *flexclash/data*: which contains the features to poison the clients' data.
-- *flexclash/model*: which contains the features to poison the clients' model updates.
-- *flexclash/pool*: which contains the features to implement any defence in the aggregation operator as well as the state-of-the-art implemented defences.
-- *notebooks*: which contains explanatory notebooks showing how to implement poisoning attacks and use the implemented defences.
-- *test*: which contains the test for the implemented features.
+- **flexclash/data**: which contains the features to poison the clients' data.
+- **flexclash/model**: which contains the features to poison the clients' model updates.
+- **flexclash/pool**: which contains the features to implement any defence in the aggregation operator as well as the state-of-the-art implemented defences.
+- **notebooks**: which contains explanatory notebooks showing how to implement poisoning attacks and use the implemented defences.
+- **test**: which contains the test for the implemented features.
 
 ### Explanatory notebooks
 
-- *Poisoning_data_FLEX.ipynb*: A notebook showing how to implement data-poisoning attacks using `flexclash` including both byzantine and backdoor attacks.
-- *Poisoning_model_FLEX.ipynb*: A notebook showing how to implement model-poisoning attacks using `flexclash`.
-- *Defences_FLEX.ipynb*: A notebook showing how to employ defences against adversarial attacks using `flexclash`.
+- **Poisoning_data_FLEX.ipynb**: A notebook showing how to implement data-poisoning attacks using `flexclash` including both byzantine and backdoor attacks.
+- **Poisoning_model_FLEX.ipynb**: A notebook showing how to implement model-poisoning attacks using `flexclash`.
+- **Defences_FLEX.ipynb**: A notebook showing how to employ defences against adversarial attacks using `flexclash`.
 
 
 ## Features
