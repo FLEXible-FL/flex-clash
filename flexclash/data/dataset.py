@@ -9,7 +9,7 @@ def _indentity_poisoning(x, y):
     return x, y
 
 
-@dataclass(kw_only=True, frozen=True)
+@dataclass(frozen=True)
 class PoisonedDataset(Dataset):
     poisoning_function: Callable = field(init=True, default=_indentity_poisoning)
 
