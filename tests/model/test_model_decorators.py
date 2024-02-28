@@ -16,7 +16,7 @@ class TestModelPoisoningDecorators(unittest.TestCase):
     def _fixture_iris_dataset(self):
         iris = load_iris()
         c_iris = Dataset.from_array(iris.data, iris.target)
-        self.f_iris = FedDataDistribution.iid_distribution(c_iris, n_clients=5)
+        self.f_iris = FedDataDistribution.iid_distribution(c_iris, n_nodes=5)
 
     def test_decorators(self):
         @init_server_model
@@ -38,9 +38,7 @@ class TestModelPoisoningDecorators(unittest.TestCase):
         def bad_poison_model(client_model: FlexModel):
             client_model["model"] = KNeighborsClassifier(n_neighbors=6)
 
-        p = FlexPool.client_server_architecture(
-            self.f_iris, init_func=build_server_model
-        )
+        p = FlexPool.client_server_pool(self.f_iris, init_func=build_server_model)
         p.servers.map(copy_server_model_to_clients, p.clients)
 
         poisoned_clients = p.clients.select(2)
