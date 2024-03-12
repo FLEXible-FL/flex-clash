@@ -14,6 +14,7 @@ Copyright (C) 2024  Instituto Andaluz Interuniversitario en Ciencia de Datos e I
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+
 from setuptools import find_packages, setup
 
 setup(
@@ -24,5 +25,5 @@ setup(
     long_description=open("README.md", "r", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
     packages=find_packages(),
-    install_requires=["flex"],
+    install_requires=["flexible-fl"],
 )
