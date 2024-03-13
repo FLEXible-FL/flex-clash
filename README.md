@@ -1,4 +1,4 @@
-<img src="Attack-defences.png" width="100">
+<img src="Attack-defense.png" width="100">
 
 # FLEX-Clash
 
