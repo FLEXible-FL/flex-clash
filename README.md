@@ -1,3 +1,5 @@
+<img src="Attack-defences.png" width="100">
+
 # FLEX-Clash
 
 flex-clash is a Python library dedicated to adversarial attacks and defences in Federated Learning. It offers the state-of-the methods and features to ease the implementation of custom methods. It is intended to extend the [FLEXible](https://github.com/FLEXible-FL/FLEXible) framework.
