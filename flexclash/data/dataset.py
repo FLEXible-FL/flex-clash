@@ -14,6 +14,7 @@ Copyright (C) 2024  Instituto Andaluz Interuniversitario en Ciencia de Datos e I
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+
 from dataclasses import dataclass, field
 from typing import Callable
 
@@ -27,6 +28,11 @@ def _indentity_poisoning(x, y):
 
 @dataclass(frozen=True)
 class PoisonedDataset(Dataset):
+    """
+    Dataset class that allows to apply a poison function lazily. You are not
+    supposed to use this class directly, but to use the `data_poisoner` decorator.
+    """
+
     poisoning_function: Callable = field(init=True, default=_indentity_poisoning)
 
     def __getitem__(self, index):
@@ -44,13 +50,7 @@ class PoisonedDataset(Dataset):
             raise ValueError("The item is not a tuple neither a Dataset")
 
     def __iter__(self):
-        return (
-            self.poisoning_function(x, y)
-            for (x, y) in zip(
-                self.X_data,
-                self.y_data if self.y_data is not None else [None] * len(self),
-            )
-        )
+        return (self.poisoning_function(x, y) for (x, y) in super().__iter__())
 
     def to_numpy(self, x_dtype=None, y_dtype=None):
         """Function to return the FlexDataObject as numpy arrays."""

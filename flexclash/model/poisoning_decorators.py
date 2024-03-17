@@ -14,6 +14,7 @@ Copyright (C) 2024  Instituto Andaluz Interuniversitario en Ciencia de Datos e I
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+
 import functools
 from copy import deepcopy
 
@@ -23,6 +24,26 @@ from flex.model import FlexModel
 
 
 def model_poisoner(func):
+    """
+    Decorator that applies a poisoning function to a FlexModel object. The poisoning function should take a FlexModel object
+    and return a poisoned FlexModel object.
+
+    Note: The FlexModel object is passed by copy, so any direct modification will not affect the original model.
+
+    Args:
+    ----
+        func: The poisoning function to be applied.
+
+    Returns:
+    -------
+        A decorated function that applies the poisoning function to a FlexModel object.
+
+    Raises:
+    ------
+        AssertionError: If the decorated function does not have at least one argument.
+        AssertionError: If the decorated function does not return a FlexModel object.
+    """
+
     min_args = 1
     assert check_min_arguments(
         func, min_args
