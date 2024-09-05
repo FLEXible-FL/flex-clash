@@ -40,6 +40,8 @@ def generalized_percentile_aggregator_f(
         weights_per_layer = [weights[layer_index] for weights in list_of_weights]
         weights_per_layer = tl.stack(weights_per_layer)
         agg_layer = tl.sort(weights_per_layer, axis=0)[percentile]
+        if isinstance(percentile, slice):
+            agg_layer = tl.mean(agg_layer, axis=0)
         agg_weights.append(agg_layer)
     return agg_weights
 

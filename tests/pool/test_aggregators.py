@@ -82,12 +82,16 @@ class TestFlexAggregators(unittest.TestCase):
         )
 
     def test_fed_median_with_np(self):
+        original_shape = [w.shape for w in self._np_weights["weights"][0]]
         median(self._np_weights, None)
         agg_weights = self._np_weights["aggregated_weights"]
         assert tl.get_backend() == "numpy"
         assert all(
             tl.all(w == tl.ones(tl.shape(w), **tl.context(w))) for w in agg_weights
         )
+        assert all(
+            w.shape == shape for w, shape in zip(agg_weights, original_shape)
+        ), f"Different shapes: {[f'{w.shape} != {shape}' for w, shape in zip(agg_weights, original_shape) if w.shape != shape]}"
 
     def test_fed_trimmed_mean_with_torch(self):
         trimmed_mean(self._torch_weights, None, trim_proportion=0.2)
@@ -106,12 +110,16 @@ class TestFlexAggregators(unittest.TestCase):
         )
 
     def test_fed_trimmed_mean_with_np(self):
+        original_shape = [w.shape for w in self._np_weights["weights"][0]]
         trimmed_mean(self._np_weights, None, trim_proportion=0.2)
         agg_weights = self._np_weights["aggregated_weights"]
         assert tl.get_backend() == "numpy"
         assert all(
             tl.all(w == tl.ones(tl.shape(w), **tl.context(w))) for w in agg_weights
         )
+        assert all(
+            w.shape == shape for w, shape in zip(agg_weights, original_shape)
+        ), f"Different shapes: {[f'{w.shape} != {shape}' for w, shape in zip(agg_weights, original_shape) if w.shape != shape]}"
 
     def test_fed_multikrum_with_torch(self):
         multikrum(self._torch_weights, None)
@@ -154,12 +162,16 @@ class TestFlexAggregators(unittest.TestCase):
         )
 
     def test_fed_bulyan_with_np(self):
+        original_shape = [w.shape for w in self._np_weights["weights"][0]]
         bulyan(self._np_weights, None, m=1)
         agg_weights = self._np_weights["aggregated_weights"]
         assert tl.get_backend() == "numpy"
         assert all(
             tl.all(w == tl.ones(tl.shape(w), **tl.context(w))) for w in agg_weights
         )
+        assert all(
+            w.shape == shape for w, shape in zip(agg_weights, original_shape)
+        ), f"Different shapes: {[f'{w.shape} != {shape}' for w, shape in zip(agg_weights, original_shape) if w.shape != shape]}"
 
     def test_fed_cdp_with_torch(self):
         cdp(self._torch_weights, None, noise_multiplier=0, l2_clip=9999)
