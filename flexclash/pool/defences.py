@@ -56,6 +56,7 @@ def trimmed_mean_f(list_of_weights: list, trim_proportion):
     num_clients = len(list_of_weights)
     min_trim = round(trim_proportion * num_clients)
     max_trim = round((1 - trim_proportion) * num_clients)
+    min_trim, max_trim = min(min_trim, max_trim), max(min_trim, max_trim)
     return generalized_percentile_aggregator_f(
         list_of_weights, slice(min_trim, max_trim + 1)
     )
