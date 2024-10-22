@@ -19,7 +19,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="flexclash",
-    version="0.0.2",
+    version="0.0.3",
     author="Nuria Rodríguez Barroso",
     keywords="adversarial attacks defences FL federated-learning flexible",
     long_description=open("README.md", "r", encoding="utf-8").read(),
