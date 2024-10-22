@@ -54,7 +54,7 @@ class PoisonedDataset(Dataset):
 
     def to_numpy(self, x_dtype=None, y_dtype=None):
         """Function to return the FlexDataObject as numpy arrays."""
-        (features, labels) = super().to_list()
+        (features, labels) = self.to_list()
         return (np.array(features, dtype=x_dtype), np.array(labels, dtype=y_dtype))
 
     def to_list(self):
