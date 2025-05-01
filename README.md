@@ -56,7 +56,7 @@ In order to install this repo locally:
 FLEX-Clash is available on the PyPi repository and can be easily installed using pip:
 
 ``
-    pip install flex-clash
+    pip install flexclash
 ``
 
 ## Citation
