@@ -25,6 +25,7 @@ This repository includes both:
 - **Poisoning_model_FLEX.ipynb**: A notebook showing how to implement model-poisoning attacks using `flexclash`.
 - **Defences_FLEX.ipynb**: A notebook showing how to employ defences against adversarial attacks using `flexclash`.
 - **inner_product_manipulation.ipynb**: A notebook demonstrating how to execute the Inner Product Manipulation (IPM) model poisoning attack and evaluate it against robust defenses.
+- **deep_gradient_leakage.ipynb**: A notebook demonstrating how an honest-but-curious server executes the Deep Gradient Leakage (DGL/iDLG) attack to reconstruct private client images and labels from shared gradients, and evaluating Differential Privacy as a countermeasure.
 
 
 
@@ -37,6 +38,7 @@ In the following we detail the poisoning attacks implemented:
 | Data poisoning | It consists of poisoning a certain amount of data of certain clients randomly or according to certain criteria. Several examples are shown in the notebooks. | [Data Poisoning Attacks Against Federated Learning Systems](https://link.springer.com/chapter/10.1007/978-3-030-58951-6_24) |
 | Model poisoning | It consists of directly poisoning the weights of the model update that the client shares with the server. | [Deep Model Poisoning Attack on Federated Learning](https://www.mdpi.com/1999-5903/13/3/73)|
 | Inner Product Manipulation (IPM) | It crafts Byzantine model updates directed opposite to the mean benign update vector, breaking Byzantine-tolerant aggregation rules. | [Fall of Empires: Breaking Byzantine-tolerant SGD by Inner Product Manipulation](https://proceedings.mlr.press/v115/xie20a.html) |
+| Deep Gradient Leakage (iDLG) | An honest-but-curious server analytically extracts client labels and reconstructs private training data from intercepted parameter gradients. | [iDLG: Improved Deep Leakage from Gradients](https://arxiv.org/abs/2001.02610) / [Deep Leakage from Gradients](https://proceedings.neurips.cc/paper/2019/file/60a6c4002cc7b29142def8871531281a-Paper.pdf) |
 
 
 In the following we detail the defences implemented:
