@@ -24,6 +24,8 @@ This repository includes both:
 - **Poisoning_data_FLEX.ipynb**: A notebook showing how to implement data-poisoning attacks using `flexclash` including both byzantine and backdoor attacks.
 - **Poisoning_model_FLEX.ipynb**: A notebook showing how to implement model-poisoning attacks using `flexclash`.
 - **Defences_FLEX.ipynb**: A notebook showing how to employ defences against adversarial attacks using `flexclash`.
+- **inner_product_manipulation.ipynb**: A notebook demonstrating how to execute the Inner Product Manipulation (IPM) model poisoning attack and evaluate it against robust defenses.
+
 
 
 ## Features
@@ -34,6 +36,8 @@ In the following we detail the poisoning attacks implemented:
 |----------|:-----------------------------------:|------:|
 | Data poisoning | It consists of poisoning a certain amount of data of certain clients randomly or according to certain criteria. Several examples are shown in the notebooks. | [Data Poisoning Attacks Against Federated Learning Systems](https://link.springer.com/chapter/10.1007/978-3-030-58951-6_24) |
 | Model poisoning | It consists of directly poisoning the weights of the model update that the client shares with the server. | [Deep Model Poisoning Attack on Federated Learning](https://www.mdpi.com/1999-5903/13/3/73)|
+| Inner Product Manipulation (IPM) | It crafts Byzantine model updates directed opposite to the mean benign update vector, breaking Byzantine-tolerant aggregation rules. | [Fall of Empires: Breaking Byzantine-tolerant SGD by Inner Product Manipulation](https://proceedings.mlr.press/v115/xie20a.html) |
+
 
 In the following we detail the defences implemented:
 

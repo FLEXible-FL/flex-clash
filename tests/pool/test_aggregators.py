@@ -21,8 +21,12 @@ import pytest
 import tensorly as tl
 
 from flexclash.pool import bulyan
+from importlib.util import find_spec
+
 from flexclash.pool import central_differential_privacy as cdp
 from flexclash.pool import median, multikrum, trimmed_mean
+
+HAS_TF = find_spec("tensorflow") is not None
 
 
 def simulate_clients_weights_for_module(n_clients, modulename):
@@ -58,9 +62,12 @@ class TestFlexAggregators(unittest.TestCase):
         self._torch_weights = simulate_clients_weights_for_module(
             n_clients=5, modulename="torch"
         )
-        self._tf_weights = simulate_clients_weights_for_module(
-            n_clients=5, modulename="tensorflow"
-        )
+        if HAS_TF:
+            self._tf_weights = simulate_clients_weights_for_module(
+                n_clients=5, modulename="tensorflow"
+            )
+        else:
+            self._tf_weights = None
         self._np_weights = simulate_clients_weights_for_module(
             n_clients=5, modulename="numpy"
         )
@@ -73,6 +80,7 @@ class TestFlexAggregators(unittest.TestCase):
             tl.all(w == tl.ones(tl.shape(w), **tl.context(w))) for w in agg_weights
         )
 
+    @unittest.skipUnless(HAS_TF, "TensorFlow not installed")
     def test_fed_median_with_tf(self):
         median(self._tf_weights, None)
         agg_weights = self._tf_weights["aggregated_weights"]
@@ -101,6 +109,7 @@ class TestFlexAggregators(unittest.TestCase):
             tl.all(w == tl.ones(tl.shape(w), **tl.context(w))) for w in agg_weights
         )
 
+    @unittest.skipUnless(HAS_TF, "TensorFlow not installed")
     def test_fed_trimmed_mean_with_tf(self):
         trimmed_mean(self._tf_weights, None, trim_proportion=0.2)
         agg_weights = self._tf_weights["aggregated_weights"]
@@ -129,6 +138,7 @@ class TestFlexAggregators(unittest.TestCase):
             tl.all(w == tl.ones(tl.shape(w), **tl.context(w))) for w in agg_weights
         )
 
+    @unittest.skipUnless(HAS_TF, "TensorFlow not installed")
     def test_fed_multikrum_with_tf(self):
         multikrum(self._tf_weights, None)
         agg_weights = self._tf_weights["aggregated_weights"]
@@ -153,6 +163,7 @@ class TestFlexAggregators(unittest.TestCase):
             tl.all(w == tl.ones(tl.shape(w), **tl.context(w))) for w in agg_weights
         )
 
+    @unittest.skipUnless(HAS_TF, "TensorFlow not installed")
     def test_fed_bulyan_with_tf(self):
         bulyan(self._tf_weights, None, m=1)
         agg_weights = self._tf_weights["aggregated_weights"]
@@ -182,6 +193,7 @@ class TestFlexAggregators(unittest.TestCase):
             for w in agg_weights
         )
 
+    @unittest.skipUnless(HAS_TF, "TensorFlow not installed")
     def test_fed_cdp_with_tf(self):
         cdp(self._tf_weights, None, noise_multiplier=0, l2_clip=9999)
         agg_weights = self._tf_weights["aggregated_weights"]

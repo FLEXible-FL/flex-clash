@@ -16,4 +16,18 @@ Copyright (C) 2024  Instituto Andaluz Interuniversitario en Ciencia de Datos e I
 """
 from __future__ import absolute_import, division, print_function
 
+from flexclash.model.attacks import (
+    inner_product_manipulation,
+    inner_product_manipulation_f,
+    ipm_poisoner,
+)
 from flexclash.model.poisoning_decorators import model_poisoner
+
+__all__ = [
+    "inner_product_manipulation",
+    "inner_product_manipulation_f",
+    "ipm_poisoner",
+    "model_poisoner",
+]
+
+
